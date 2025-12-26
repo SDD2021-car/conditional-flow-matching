@@ -1,0 +1,41 @@
+mode: paired
+resolution: 256
+batch_size: 4
+data_root: data/sar_opt
+
+model:
+  in_channels: 3
+  base_channels: 64
+
+optim:
+  lr: 0.0002
+
+phi:
+  backbone: dinov2
+  model_name: dinov2_vits14
+  layer: -1
+  use_cls_token: false
+
+struct:
+  eps: 0.01
+  mask_type: topk
+  topk: 8
+  tau: 0.4
+  beta: 0.07
+  lambda0: 1.0
+  p: 2.0
+  lambda_min: 0.1
+
+ot:
+  eps_ot: 0.05
+  iters_ot: 50
+  match_type: argmax
+
+trainer:
+  device: cuda
+  amp: true
+  grad_clip: 1.0
+  log_every: 50
+  sample_every: 500
+  output_dir: outputs
+  num_steps: 10000
