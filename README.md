@@ -158,6 +158,75 @@ python -m ipykernel install --user --name=torchcfm
 # launch our notebooks with the torchcfm kernel
 ```
 
+## SAR→Opt OT-FM Training (paired & unpaired)
+
+This repo includes a minimal PyTorch training scaffold for SAR→Opt image translation based on Optimal Transport Flow Matching (OT-FM), supporting both paired and unpaired modes with a structural regularizer.
+
+### 1) Environment setup
+
+```bash
+# clone project
+git clone https://github.com/atong01/conditional-flow-matching.git
+cd conditional-flow-matching
+
+# [OPTIONAL] create conda environment
+conda create -n torchcfm python=3.10
+conda activate torchcfm
+
+# install pytorch according to instructions
+# https://pytorch.org/get-started/
+
+# install requirements
+pip install -r requirements.txt
+
+# install torchcfm
+pip install -e .
+```
+
+> Note: the training pipeline uses a frozen DINO feature extractor via `torch.hub`
+> (`facebookresearch/dinov2` or `facebookresearch/dinov3`). Ensure you have network
+> access to download weights on first run.
+
+### 2) Prepare data
+
+Use the following directory layout. For paired mode, A and B images must be aligned
+by filename order.
+
+```
+data/sar_opt/
+  A/   # SAR images
+  B/   # Optical images
+```
+
+### 3) Configure training
+
+Edit `configs/train.yaml` to choose `mode: paired` or `mode: unpaired` and set paths,
+batch size, OT matching settings, and structural regularization hyperparameters.
+
+Key fields:
+
+- `mode`: `paired` or `unpaired`
+- `data_root`: dataset root (e.g., `data/sar_opt`)
+- `phi`: DINO backbone (`dinov2` or `dinov3`), model name, layer
+- `struct`: `eps`, `mask_type` (`topk` or `soft`), `lambda0`, `p`, `lambda_min`
+- `ot`: `eps_ot`, `iters_ot`, `match_type` (`argmax` or `sample`)
+
+### 4) Run training
+
+```bash
+python scripts/train.py --config configs/train.yaml
+```
+
+Sample grids are saved under `outputs/` as:
+
+```
+outputs/samples_000500.png
+outputs/samples_001000.png
+...
+```
+
+Each grid is concatenated as `[xA, x_pred, xB]` for quick inspection.
+
 ## Project Structure
 
 The directory structure looks like this:
