@@ -55,6 +55,7 @@ def main() -> None:
         use_cls_token=cfg["phi"].get("use_cls_token", False),
         pad_to_patch=cfg["phi"].get("pad_to_patch", True),
         pad_mode=cfg["phi"].get("pad_mode", "constant"),
+        resize_to=cfg["phi"].get("resize_to"),
     )
 
     struct_config = StructLossConfig(

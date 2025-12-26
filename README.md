@@ -208,6 +208,7 @@ Key fields:
 - `mode`: `paired` or `unpaired`
 - `data_root`: dataset root (e.g., `data/sar_opt`)
 - `phi`: DINO backbone (`dinov2` or `dinov3`), model name, layer
+- `phi.resize_to`: resize inputs before DINO (e.g., `224`); set `null` to disable
 - `phi.pad_to_patch`: pad inputs to be divisible by the DINO patch size (default `true`)
 - `struct`: `eps`, `mask_type` (`topk` or `soft`), `lambda0`, `p`, `lambda_min`
 - `ot`: `eps_ot`, `iters_ot`, `match_type` (`argmax` or `sample`)

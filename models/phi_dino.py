@@ -14,6 +14,7 @@ class DinoConfig:
     use_cls_token: bool = False
     pad_to_patch: bool = True
     pad_mode: str = "constant"
+    resize_to: Optional[int] = None
 
 
 class DinoFeatureExtractor(nn.Module):
@@ -56,6 +57,13 @@ class DinoFeatureExtractor(nn.Module):
 
     @torch.no_grad()
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.config.resize_to is not None:
+            x = F.interpolate(
+                x,
+                size=(self.config.resize_to, self.config.resize_to),
+                mode="bilinear",
+                align_corners=False,
+            )
         x = self._pad_to_patch(x)
         if hasattr(self.model, "get_intermediate_layers"):
             n_layers = abs(self.config.layer) if self.config.layer < 0 else 1
@@ -90,6 +98,7 @@ def build_phi(
     use_cls_token: bool = False,
     pad_to_patch: bool = True,
     pad_mode: str = "constant",
+    resize_to: Optional[int] = None,
 ) -> DinoFeatureExtractor:
     config = DinoConfig(
         backbone=backbone,
@@ -98,5 +107,6 @@ def build_phi(
         use_cls_token=use_cls_token,
         pad_to_patch=pad_to_patch,
         pad_mode=pad_mode,
+        resize_to=resize_to,
     )
     return DinoFeatureExtractor(config)

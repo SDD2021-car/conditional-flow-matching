@@ -15,6 +15,7 @@ phi:
   model_name: dinov2_vits14
   layer: -1
   use_cls_token: false
+  resize_to: 224
   pad_to_patch: true
   pad_mode: constant
 
