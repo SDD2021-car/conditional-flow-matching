@@ -14,7 +14,7 @@ class DinoConfig:
     use_cls_token: bool = False
     pad_to_patch: bool = True
     pad_mode: str = "constant"
-    resize_to: Optional[int] = None
+    resize_to: Optional[int] = 224
 
 
 class DinoFeatureExtractor(nn.Module):
@@ -98,7 +98,7 @@ def build_phi(
     use_cls_token: bool = False,
     pad_to_patch: bool = True,
     pad_mode: str = "constant",
-    resize_to: Optional[int] = None,
+    resize_to: Optional[int] = 224,
 ) -> DinoFeatureExtractor:
     config = DinoConfig(
         backbone=backbone,
