@@ -98,7 +98,7 @@ score = fid.compute_fid(
     batch_size=FLAGS.batch_size_fid,
     dataset_res=32,
     num_gen=FLAGS.num_gen,
-    dataset_split="train",
+    dataset_split="train_step",
     mode="legacy_tensorflow",
 )
 print()

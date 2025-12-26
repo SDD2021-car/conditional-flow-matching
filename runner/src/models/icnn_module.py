@@ -125,7 +125,7 @@ class ICNNLitModule(LightningModule):
                 )
                 loss += reg
 
-        prefix = "train"
+        prefix = "train_step"
         self.log_dict(
             {f"{prefix}/loss": loss, f"{prefix}/reg": reg},
             on_step=True,

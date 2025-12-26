@@ -1,4 +1,4 @@
-# train with many loggers at once
+# train_step with many loggers at once
 
 defaults:
   # - comet.yaml

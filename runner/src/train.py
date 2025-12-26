@@ -100,7 +100,7 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
         log.info("Logging hyperparameters!")
         utils.log_hyperparameters(object_dict)
 
-    if cfg.get("train"):
+    if cfg.get("train_step"):
         log.info("Starting training!")
         trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
 
@@ -117,15 +117,15 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
 
     test_metrics = trainer.callback_metrics
 
-    # merge train and test metrics
+    # merge train_step and test metrics
     metric_dict = {**train_metrics, **test_metrics}
 
     return metric_dict, object_dict
 
 
-@hydra.main(version_base="1.2", config_path=root / "configs", config_name="train.yaml")
+@hydra.main(version_base="1.2", config_path=root / "configs", config_name="train_step.yaml")
 def main(cfg: DictConfig) -> Optional[float]:
-    # train the model
+    # train_step the model
     metric_dict, _ = train(cfg)
 
     # safely retrieve metric value for hydra-based hyperparameter optimization

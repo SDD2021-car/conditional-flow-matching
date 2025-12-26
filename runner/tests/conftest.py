@@ -8,7 +8,7 @@ from omegaconf import DictConfig, open_dict
 @pytest.fixture(scope="package")
 def cfg_train_global() -> DictConfig:
     with initialize(version_base="1.2", config_path="../configs"):
-        cfg = compose(config_name="train.yaml", return_hydra_config=True, overrides=[])
+        cfg = compose(config_name="train_step.yaml", return_hydra_config=True, overrides=[])
 
         # set defaults for all tests
         with open_dict(cfg):

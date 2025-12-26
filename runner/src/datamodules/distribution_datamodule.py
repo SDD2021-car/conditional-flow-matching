@@ -274,7 +274,7 @@ class CustomGeodesicTrajectoryDataModule(LightningDataModule):
         return self.combined_loader(0, shuffle=True)
 
     def val_dataloader(self):
-        """Use training set for validation assuming [1,0,0] train val test split."""
+        """Use training set for validation assuming [1,0,0] train_step val test split."""
         return self.combined_loader(0, shuffle=False, load_full=False)
 
     def test_dataloader(self):

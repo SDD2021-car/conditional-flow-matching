@@ -214,7 +214,7 @@ Key fields:
 ### 4) Run training
 
 ```bash
-python scripts/train.py --config configs/train.yaml
+python scripts/train_step.py --config configs/train_step.yaml
 ```
 
 Sample grids are saved under `outputs/` as:

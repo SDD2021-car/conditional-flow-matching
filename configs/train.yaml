@@ -1,7 +1,7 @@
 mode: paired
 resolution: 256
 batch_size: 4
-data_root: data/sar_opt
+data_root: /NAS_data/yjy/SEN1-2-BIT_matched/Train
 
 model:
   in_channels: 3

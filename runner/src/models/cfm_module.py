@@ -265,7 +265,7 @@ class CFMLitModule(LightningModule):
     def training_step(self, batch: Any, batch_idx: int):
         reg, mse = self.step(batch, training=True)
         loss = mse + reg
-        prefix = "train"
+        prefix = "train_step"
         self.log_dict(
             {f"{prefix}/loss": loss, f"{prefix}/mse": mse, f"{prefix}/reg": reg},
             on_step=True,

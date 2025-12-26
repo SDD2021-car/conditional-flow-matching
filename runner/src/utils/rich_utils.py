@@ -99,5 +99,5 @@ if __name__ == "__main__":
     from hydra import compose, initialize
 
     with initialize(version_base="1.2", config_path="../../configs"):
-        cfg = compose(config_name="train.yaml", return_hydra_config=False, overrides=[])
+        cfg = compose(config_name="train_step.yaml", return_hydra_config=False, overrides=[])
         print_config_tree(cfg, resolve=False, save_to_file=False)

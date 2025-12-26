@@ -1,7 +1,6 @@
 import argparse
 import json
 from pathlib import Path
-
 import torch
 import yaml
 from torch.utils.data import DataLoader
@@ -12,7 +11,7 @@ from losses.struct_loss import StructLossConfig
 from models.fm_net import FMNet
 from models.phi_dino import build_phi
 from ot.matching import OTConfig
-from train.trainer import LambdaSchedule, Trainer, TrainerConfig
+from train_step.trainer import LambdaSchedule, Trainer, TrainerConfig
 
 
 def load_config(path: str) -> dict:

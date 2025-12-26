@@ -33,5 +33,5 @@ partial_solver:
 
 sigma_min: 0.1
 
-# Set to integer if want to train with left out timepoint
+# Set to integer if want to train_step with left out timepoint
 leaveout_timepoint: -1

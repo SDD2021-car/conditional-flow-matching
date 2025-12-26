@@ -88,7 +88,7 @@ class CFMLitModule(LightningModule):
 
     def training_step(self, batch: Any, batch_idx: int):
         loss = self.step(batch, training=True)
-        self.log("train/loss", loss, on_step=True, prog_bar=True)
+        self.log("train_step/loss", loss, on_step=True, prog_bar=True)
         return loss
 
     def eval_step(self, batch: Any, batch_idx: int, prefix: str):

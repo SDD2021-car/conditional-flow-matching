@@ -24,5 +24,5 @@ augmentations:
   jacobian_diag_frobenius_reg: 0.
   jacobian_off_diag_frobenius_reg: 0.
 
-# Set to integer if want to train with left out timepoint
+# Set to integer if want to train_step with left out timepoint
 leaveout_timepoint: -1

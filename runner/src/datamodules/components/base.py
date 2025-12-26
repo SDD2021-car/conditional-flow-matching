@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 
 
 class BaseLightningDataModule(LightningDataModule):
-    """Adds base train, val, test dataloaders from data_train, data_val, and data_test."""
+    """Adds base train_step, val, test dataloaders from data_train, data_val, and data_test."""
 
     def train_dataloader(self):
         return DataLoader(

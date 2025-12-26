@@ -1,4 +1,4 @@
-"""Helpers to train with 16-bit precision."""
+"""Helpers to train_step with 16-bit precision."""
 
 import numpy as np
 import torch as th

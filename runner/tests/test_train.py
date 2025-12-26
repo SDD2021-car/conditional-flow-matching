@@ -9,7 +9,7 @@ from tests.helpers.run_if import RunIf
 
 
 def test_train_fast_dev_run(cfg_train):
-    """Run for 1 train, val and test step."""
+    """Run for 1 train_step, val and test step."""
     HydraConfig().set_config(cfg_train)
     with open_dict(cfg_train):
         cfg_train.trainer.fast_dev_run = True
@@ -19,7 +19,7 @@ def test_train_fast_dev_run(cfg_train):
 
 @RunIf(min_gpus=1)
 def test_train_fast_dev_run_gpu(cfg_train):
-    """Run for 1 train, val and test step on GPU."""
+    """Run for 1 train_step, val and test step on GPU."""
     HydraConfig().set_config(cfg_train)
     with open_dict(cfg_train):
         cfg_train.trainer.fast_dev_run = True
