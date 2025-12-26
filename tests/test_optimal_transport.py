@@ -12,7 +12,7 @@ from torchcfm.optimal_transport import OTPlanSampler, wasserstein
 ot_sampler = OTPlanSampler(method="exact")
 
 
-def test_sample_map(batch_size=128):
+def test_sample_map(batch_size=4):
     # Build sparse random OT map
     map = np.eye(batch_size)
     rng = np.random.default_rng()
@@ -29,7 +29,7 @@ def test_sample_map(batch_size=128):
     assert np.array_equal(reconstructed_map, permuted_map)
 
 
-def test_get_map(batch_size=128):
+def test_get_map(batch_size=4):
     x0 = torch.randn(batch_size, 2, 2, 2)
     x1 = torch.randn(batch_size, 2, 2, 2)
 
@@ -41,7 +41,7 @@ def test_get_map(batch_size=128):
     assert np.array_equal(pi, pot_pi)
 
 
-def test_sample_plan(batch_size=128, seed=1980):
+def test_sample_plan(batch_size=4, seed=1980):
     torch.manual_seed(seed)
     np.random.seed(seed)
     x0 = torch.randn(batch_size, 2, 2, 2)

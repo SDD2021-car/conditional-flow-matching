@@ -34,7 +34,7 @@ class TrainerConfig:
     sample_every: int = 500
     output_dir: str = "outputs"
     mode: str = "paired"
-
+    checkpoint_every: int = 10000
 
 class Trainer:
     def __init__(
@@ -69,6 +69,18 @@ class Trainer:
     ) -> None:
         grid = torch.cat([x_a, x_pred, x_b], dim=0)
         save_image(grid, self.output_dir / f"samples_{step:06d}.png", nrow=x_a.size(0))
+
+    def _save_checkpoint(self, step: int) -> None:
+        checkpoint_dir = self.output_dir / "checkpoints"
+        checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "step": step,
+                "model": self.model.state_dict(),
+                "optimizer": self.optimizer.state_dict(),
+            },
+            checkpoint_dir / f"ckpt_{step:06d}.pt",
+        )
 
     def _paired_step(self, batch: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]:
         return batch
@@ -148,3 +160,6 @@ class Trainer:
                 with torch.no_grad():
                     x_pred = x_t + (1 - t_view) * v_pred
                 self._save_samples(step, x_a, x_b, x_pred)
+
+            if self.config.checkpoint_every > 0 and step % self.config.checkpoint_every == 0:
+                self._save_checkpoint(step)

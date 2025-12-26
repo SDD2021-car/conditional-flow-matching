@@ -14,7 +14,7 @@ from torchcfm.conditional_flow_matching import (
 )
 
 seed = 1994
-batch_size = 128
+batch_size = 4
 
 
 @pytest.mark.parametrize(

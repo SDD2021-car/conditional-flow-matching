@@ -2,6 +2,8 @@ import argparse
 import json
 from pathlib import Path
 import torch
+import torch.multiprocessing as mp
+mp.set_sharing_strategy('file_system')
 import yaml
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -30,11 +32,11 @@ def build_dataloader(cfg: dict):
     )
     if cfg["mode"] == "paired":
         dataset = PairedImageDataset(cfg["data_root"], transform=tfm)
-        return DataLoader(dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=4)
+        return DataLoader(dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=2)
     dataset_a = UnpairedImageDataset(cfg["data_root"], "A", transform=tfm)
     dataset_b = UnpairedImageDataset(cfg["data_root"], "B", transform=tfm)
-    loader_a = DataLoader(dataset_a, batch_size=cfg["batch_size"], shuffle=True, num_workers=4)
-    loader_b = DataLoader(dataset_b, batch_size=cfg["batch_size"], shuffle=True, num_workers=4)
+    loader_a = DataLoader(dataset_a, batch_size=cfg["batch_size"], shuffle=True, num_workers=2)
+    loader_b = DataLoader(dataset_b, batch_size=cfg["batch_size"], shuffle=True, num_workers=2)
     return loader_a, loader_b
 
 
@@ -78,6 +80,7 @@ def main() -> None:
         log_every=cfg["trainer"]["log_every"],
         sample_every=cfg["trainer"]["sample_every"],
         output_dir=cfg["trainer"]["output_dir"],
+        checkpoint_every=cfg["trainer"].get("checkpoint_every", 10000),
         mode=cfg["mode"],
     )
 

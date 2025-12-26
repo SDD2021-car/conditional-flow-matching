@@ -229,6 +229,36 @@ outputs/samples_001000.png
 
 Each grid is concatenated as `[xA, x_pred, xB]` for quick inspection.
 
+### 5) Inference (SAR → Optical)
+
+Use a trained checkpoint to generate optical images from SAR inputs:
+
+```bash
+python scripts/infer.py \
+  --input_dir data/sar_opt/A \
+  --output_dir outputs/infer_opt \
+  --checkpoint outputs/checkpoints/ckpt_010000.pt \
+  --resolution 256 \
+  --steps 50
+```
+
+Checkpoints are saved every `trainer.checkpoint_every` steps in `outputs/checkpoints/`.
+
+### 5) Inference (SAR → Optical)
+
+Use a trained checkpoint to generate optical images from SAR inputs:
+
+```bash
+python scripts/infer.py \
+  --input_dir data/sar_opt/A \
+  --output_dir outputs/infer_opt \
+  --checkpoint outputs/checkpoints/ckpt_010000.pt \
+  --resolution 256 \
+  --steps 50
+```
+
+Checkpoints are saved every `trainer.checkpoint_every` steps in `outputs/checkpoints/`.
+
 ## Project Structure
 
 The directory structure looks like this:

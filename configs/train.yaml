@@ -8,7 +8,7 @@ model:
   base_channels: 64
 
 optim:
-  lr: 0.0002
+  lr: 0.00001
 
 phi:
   backbone: dinov2
@@ -40,5 +40,6 @@ trainer:
   grad_clip: 1.0
   log_every: 50
   sample_every: 500
-  output_dir: outputs
-  num_steps: 10000
+  checkpoint_every: 10000
+  output_dir: /data/yjy_data/conditional-flow-matching/outputs_bs4
+  num_steps: 200000
