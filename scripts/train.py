@@ -53,6 +53,8 @@ def main() -> None:
         model_name=cfg["phi"]["model_name"],
         layer=cfg["phi"].get("layer", -1),
         use_cls_token=cfg["phi"].get("use_cls_token", False),
+        pad_to_patch=cfg["phi"].get("pad_to_patch", True),
+        pad_mode=cfg["phi"].get("pad_mode", "constant"),
     )
 
     struct_config = StructLossConfig(
