@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+import inspect
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -36,6 +37,7 @@ class TrainerConfig:
     mode: str = "paired"
     checkpoint_every: int = 10000
 
+
 class Trainer:
     def __init__(
         self,
@@ -52,6 +54,9 @@ class Trainer:
         self.optimizer = optimizer
         self.phi = phi
         self.struct_loss = StructLoss(phi, struct_config)
+        self.struct_loss_supports_stats = (
+            "return_stats" in inspect.signature(self.struct_loss.forward).parameters
+        )
         self.lambda_schedule = lambda_schedule
         self.ot_config = ot_config
         self.psi = psi or phi
@@ -139,16 +144,16 @@ class Trainer:
                 loss_fm = torch.mean((v_pred - v_tgt) ** 2)
 
                 # Insert L_struct here
-                if step % self.config.log_every == 0:
+                if step % self.config.log_every == 0 and self.struct_loss_supports_stats:
                     loss_struct_per_sample, struct_stats = self.struct_loss(
                         x_t, v_pred, return_stats=True
                     )
                 else:
                     loss_struct_per_sample = self.struct_loss(x_t, v_pred)
                     struct_stats = None
-                loss_struct = loss_struct_per_sample.mean()
-                lambda_t = self.lambda_schedule(t).mean()
-                loss = loss_fm + lambda_t * loss_struct
+            loss_struct = loss_struct_per_sample.float().mean()
+            lambda_t = self.lambda_schedule(t).mean()
+            loss = loss_fm + lambda_t * loss_struct
 
             self.scaler.scale(loss).backward()
             if self.config.grad_clip > 0:

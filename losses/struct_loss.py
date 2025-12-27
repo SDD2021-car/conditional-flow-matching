@@ -81,8 +81,12 @@ class StructLoss(nn.Module):
             diff_values = diff[mask > 0]
             if diff_values.numel() == 0:
                 diff_values = diff.flatten()
-            diff_p95 = torch.quantile(diff_values, 0.95)
-            diff_p99 = torch.quantile(diff_values, 0.99)
+            diff_p95 = torch.quantile(
+                diff_values.abs().float(), 0.95
+            )
+            diff_p99 = torch.quantile(
+                diff_values.abs().float(), 0.99
+            )
 
         stats = {
             "mask_mean": mask_mean,
