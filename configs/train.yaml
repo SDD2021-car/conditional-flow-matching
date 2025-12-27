@@ -35,11 +35,11 @@ ot:
   match_type: argmax
 
 trainer:
-  device: cuda:2
+  device: cuda:7
   amp: true
   grad_clip: 1.0
   log_every: 50
   sample_every: 500
   checkpoint_every: 2000
-  output_dir: /data/yjy_data/conditional-flow-matching/outputs_2
+  output_dir: /data/yjy_data/conditional-flow-matching/outputs_change_struct_loss
   num_steps: 200000
