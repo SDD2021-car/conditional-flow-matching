@@ -1,6 +1,6 @@
 mode: paired
 resolution: 256
-batch_size: 4
+batch_size: 12
 data_root: /NAS_data/yjy/SEN1-2-BIT_matched/Train
 
 model:
@@ -35,11 +35,11 @@ ot:
   match_type: argmax
 
 trainer:
-  device: cuda
+  device: cuda:2
   amp: true
   grad_clip: 1.0
   log_every: 50
   sample_every: 500
-  checkpoint_every: 10000
-  output_dir: /data/yjy_data/conditional-flow-matching/outputs_bs4
+  checkpoint_every: 2000
+  output_dir: /data/yjy_data/conditional-flow-matching/outputs_2
   num_steps: 200000
