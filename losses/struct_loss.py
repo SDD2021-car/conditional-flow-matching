@@ -46,7 +46,12 @@ class StructLoss(nn.Module):
         self.phi = phi
         self.config = config
 
-    def forward(self, x_t: torch.Tensor, v_pred: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x_t: torch.Tensor,
+        v_pred: torch.Tensor,
+        return_stats: bool = False,
+    ) -> torch.Tensor | tuple[torch.Tensor, dict[str, torch.Tensor]]:
         v_norm = rms_normalize(v_pred)
         x_probe = x_t + self.config.eps * v_norm
 
@@ -55,11 +60,34 @@ class StructLoss(nn.Module):
         sim_t = _self_similarity(tokens_t)
         sim_probe = _self_similarity(tokens_probe)
 
-        if self.config.mask_type == "soft":
-            mask = _soft_mask(sim_t, self.config.tau, self.config.beta)
-        else:
-            mask = _topk_mask(sim_t, self.config.topk)
+        with torch.no_grad():
+            sim_t_detached = sim_t.detach()
+            if self.config.mask_type == "soft":
+                mask = _soft_mask(sim_t_detached, self.config.tau, self.config.beta)
+            else:
+                mask = _topk_mask(sim_t_detached, self.config.topk)
 
-        diff = mask * (sim_probe - sim_t)
-        loss = torch.mean(torch.sum(diff**2, dim=(1, 2)))
-        return loss
+        diff = sim_probe - sim_t
+        masked_diff = diff * mask
+        mask_sum = mask.sum(dim=(1, 2))
+        loss = torch.sum(masked_diff**2, dim=(1, 2)) / (mask_sum + 1e-6)
+
+        if not return_stats:
+            return loss
+
+        with torch.no_grad():
+            mask_mean = mask.mean()
+            mask_sum_total = mask.sum()
+            diff_values = diff[mask > 0]
+            if diff_values.numel() == 0:
+                diff_values = diff.flatten()
+            diff_p95 = torch.quantile(diff_values, 0.95)
+            diff_p99 = torch.quantile(diff_values, 0.99)
+
+        stats = {
+            "mask_mean": mask_mean,
+            "mask_sum": mask_sum_total,
+            "diff_p95": diff_p95,
+            "diff_p99": diff_p99,
+        }
+        return loss, stats

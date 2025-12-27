@@ -139,7 +139,14 @@ class Trainer:
                 loss_fm = torch.mean((v_pred - v_tgt) ** 2)
 
                 # Insert L_struct here
-                loss_struct = self.struct_loss(x_t, v_pred)
+                if step % self.config.log_every == 0:
+                    loss_struct_per_sample, struct_stats = self.struct_loss(
+                        x_t, v_pred, return_stats=True
+                    )
+                else:
+                    loss_struct_per_sample = self.struct_loss(x_t, v_pred)
+                    struct_stats = None
+                loss_struct = loss_struct_per_sample.mean()
                 lambda_t = self.lambda_schedule(t).mean()
                 loss = loss_fm + lambda_t * loss_struct
 
@@ -151,9 +158,26 @@ class Trainer:
             self.scaler.update()
 
             if step % self.config.log_every == 0:
+                v_pred_flat = v_pred.flatten(1)
+                v_tgt_flat = v_tgt.flatten(1)
+                v_pred_norm = v_pred_flat.norm(dim=1).mean()
+                v_pred_err_norm = (v_pred_flat - v_tgt_flat).norm(dim=1).mean()
+                if struct_stats is not None:
+                    mask_mean = struct_stats["mask_mean"].item()
+                    mask_sum = struct_stats["mask_sum"].item()
+                    diff_p95 = struct_stats["diff_p95"].item()
+                    diff_p99 = struct_stats["diff_p99"].item()
+                else:
+                    mask_mean = float("nan")
+                    mask_sum = float("nan")
+                    diff_p95 = float("nan")
+                    diff_p99 = float("nan")
                 print(
                     f"step={step} loss={loss.item():.4f} "
-                    f"fm={loss_fm.item():.4f} struct={loss_struct.item():.4f}"
+                    f"fm={loss_fm.item():.4f} struct={loss_struct.item():.4f} "
+                    f"mask_mean={mask_mean:.6f} mask_sum={mask_sum:.1f} "
+                    f"diff_p95={diff_p95:.6f} diff_p99={diff_p99:.6f} "
+                    f"vpred_norm={v_pred_norm.item():.4f} vpred_err={v_pred_err_norm.item():.4f}"
                 )
 
             if step % self.config.sample_every == 0:
