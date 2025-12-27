@@ -3,6 +3,7 @@ from pathlib import Path
 
 import torch
 from PIL import Image
+from tqdm import tqdm
 from torchvision import transforms
 from torchvision.utils import save_image
 
@@ -54,7 +55,7 @@ def main() -> None:
         raise ValueError(f"No images found in {input_dir}")
 
     with torch.no_grad():
-        for path in image_paths:
+        for path in tqdm(image_paths, desc="Inference", unit="image"):
             img = Image.open(path).convert("RGB")
             x = tfm(img).unsqueeze(0).to(device)
             x_t = x
