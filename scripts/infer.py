@@ -23,8 +23,8 @@ def list_images(folder: Path) -> list[Path]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", type=str, default="/NAS_data/yjy/SEN1-2-BIT_matched/Test/A", required=False)
-    parser.add_argument("--output_dir", type=str, default="/data/yjy_data/conditional-flow-matching/outputs_1/result_10000", required=False)
-    parser.add_argument("--checkpoint", type=str, default="/data/yjy_data/conditional-flow-matching/outputs_1/checkpoints/ckpt_010000.pt", required=False)
+    parser.add_argument("--output_dir", type=str, default="/data/yjy_data/conditional-flow-matching/outputs_change_struct_loss/result_10000", required=False)
+    parser.add_argument("--checkpoint", type=str, default="/data/yjy_data/conditional-flow-matching/outputs_change_struct_loss/checkpoints/ckpt_010000.pt", required=False)
     parser.add_argument("--resolution", type=int, default=256)
     parser.add_argument("--steps", type=int, default=100)
     parser.add_argument("--device", type=str, default="cuda")

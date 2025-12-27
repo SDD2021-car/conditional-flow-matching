@@ -178,8 +178,8 @@ class Trainer:
                     diff_p95 = float("nan")
                     diff_p99 = float("nan")
                 print(
-                    f"step={step} loss={loss.item():.4f} "
-                    f"fm={loss_fm.item():.4f} struct={loss_struct.item():.4f} "
+                    f"step={step} loss={loss.item():.5f} "
+                    f"fm={loss_fm.item():.5f} struct={loss_struct.item():.7f} "
                     f"mask_mean={mask_mean:.6f} mask_sum={mask_sum:.1f} "
                     f"diff_p95={diff_p95:.6f} diff_p99={diff_p99:.6f} "
                     f"vpred_norm={v_pred_norm.item():.4f} vpred_err={v_pred_err_norm.item():.4f}"
